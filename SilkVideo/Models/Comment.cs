@@ -11,5 +11,9 @@ namespace SilkVideo.Models
         [Key]
         public long Id { set; get; }
         public string Message { set; get; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime CommentTime { set; get; }
     }
 }

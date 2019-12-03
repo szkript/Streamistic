@@ -11,5 +11,10 @@ namespace SilkVideo.Models
     {
         [Key]
         public long Id { set; get; }
+        public string Description { set; get; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime UploadTime { set; get; }
     }
 }

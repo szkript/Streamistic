@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace SilkVideo
 {
@@ -24,6 +25,8 @@ namespace SilkVideo
             services.AddDbContext<SilkVideoContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("SilkVideo")));
 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<SilkVideoContext>();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -52,6 +55,8 @@ namespace SilkVideo
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

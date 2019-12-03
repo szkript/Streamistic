@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SilkVideo;
 
 namespace SilkVideo.Migrations
 {
     [DbContext(typeof(SilkVideoContext))]
-    partial class SilkVideoContextModelSnapshot : ModelSnapshot
+    [Migration("20191203134227_Silk4.0")]
+    partial class Silk40
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
