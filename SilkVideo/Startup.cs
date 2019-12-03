@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace SilkVideo
 {
@@ -20,6 +21,8 @@ namespace SilkVideo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<SilkVideoContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("SilkVideo")));
 
             services.AddControllersWithViews();
 
