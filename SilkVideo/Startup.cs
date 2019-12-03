@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace SilkVideo
 {
@@ -20,7 +22,11 @@ namespace SilkVideo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<SilkVideoContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("SilkVideo")));
 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<SilkVideoContext>();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -49,6 +55,8 @@ namespace SilkVideo
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
