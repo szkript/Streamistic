@@ -166,9 +166,14 @@ namespace SilkVideo.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<long?>("VideoId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("Comments");
                 });
@@ -248,6 +253,9 @@ namespace SilkVideo.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UploadTime")
                         .HasColumnType("datetime2");
 
@@ -317,6 +325,10 @@ namespace SilkVideo.Migrations
                     b.HasOne("SilkVideo.Models.User", null)
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
+
+                    b.HasOne("SilkVideo.Models.Video", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("VideoId");
                 });
 
             modelBuilder.Entity("SilkVideo.Models.Video", b =>
