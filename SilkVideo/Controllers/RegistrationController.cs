@@ -22,12 +22,28 @@ namespace SilkVideo.Controllers
         }
 
 
+        [HttpGet("{username}")]
+        public async Task<bool> IsUsernameInUse(string username)
+        {
+            var user = await usermanager.FindByNameAsync(username);
+            
+            if (user != null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Registration(User user)
+        public async Task<bool> Registration(User user)
         {
             var iduser = new IdentityUser { UserName = user.UserName };
             var result = await usermanager.CreateAsync(user, user.Password);
-            return Redirect("/");
+            return result.Succeeded;
         }
     }
 }
