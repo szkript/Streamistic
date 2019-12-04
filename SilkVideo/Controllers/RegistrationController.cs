@@ -52,7 +52,7 @@ namespace SilkVideo.Controllers
         {
             var video = new Video();
             video.Description = "azaz";
-            var user = await usermanager.FindByNameAsync("ezaz");
+            var user = await usermanager.FindByNameAsync("szkript");
             user.Videos = new List<Video>();
             user.Videos.Add(video);
             await usermanager.UpdateAsync(user);

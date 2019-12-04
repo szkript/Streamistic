@@ -42,7 +42,7 @@ namespace SilkVideo.Controllers
         [HttpPost]
         public async Task<bool> UploadVideoData(Video video)
         {
-            var user = await _userManager.FindByNameAsync("ezaz");
+            var user = await _userManager.FindByNameAsync("szkript");
             if (user.Videos == null)
             {
                 user.Videos = new List<Video>();
