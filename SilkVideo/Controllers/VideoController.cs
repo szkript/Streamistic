@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SilkVideo.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SilkVideo.Controllers
 {
@@ -43,12 +40,14 @@ namespace SilkVideo.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> UploadVideoData()
+        public async Task<bool> UploadVideoData(Video video)
         {
-            var video = new Video();
-            video.Description = "azaz";
             var user = await _userManager.FindByNameAsync("ezaz");
-            user.Videos = new List<Video>();
+            if (user.Videos == null)
+            {
+                user.Videos = new List<Video>();
+            }
+
             user.Videos.Add(video);
             await _userManager.UpdateAsync(user);
             return true;
