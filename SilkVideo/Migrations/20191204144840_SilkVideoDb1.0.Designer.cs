@@ -10,8 +10,8 @@ using SilkVideo;
 namespace SilkVideo.Migrations
 {
     [DbContext(typeof(SilkVideoContext))]
-    [Migration("20191203133721_Silk3.0")]
-    partial class Silk30
+    [Migration("20191204144840_SilkVideoDb1.0")]
+    partial class SilkVideoDb10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -165,15 +165,17 @@ namespace SilkVideo.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<long?>("VideoId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("Comments");
                 });
@@ -253,18 +255,18 @@ namespace SilkVideo.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UploadTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Videos");
                 });
@@ -324,14 +326,18 @@ namespace SilkVideo.Migrations
                 {
                     b.HasOne("SilkVideo.Models.User", null)
                         .WithMany("Comments")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("SilkVideo.Models.Video", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("VideoId");
                 });
 
             modelBuilder.Entity("SilkVideo.Models.Video", b =>
                 {
                     b.HasOne("SilkVideo.Models.User", null)
                         .WithMany("Videos")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

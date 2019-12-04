@@ -3,49 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SilkVideo.Migrations
 {
-    public partial class Silk30 : Migration
+    public partial class SilkVideoDb10 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
-                table: "Videos",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "UploadTime",
-                table: "Videos",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
-            migrationBuilder.AddColumn<long>(
-                name: "UserId",
-                table: "Videos",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserId1",
-                table: "Videos",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "CommentTime",
-                table: "Comments",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
-            migrationBuilder.AddColumn<long>(
-                name: "UserId",
-                table: "Comments",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserId1",
-                table: "Comments",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -191,15 +152,55 @@ namespace SilkVideo.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Videos_UserId1",
-                table: "Videos",
-                column: "UserId1");
+            migrationBuilder.CreateTable(
+                name: "Videos",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(nullable: true),
+                    Path = table.Column<string>(nullable: true),
+                    UploadTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Videos_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId1",
-                table: "Comments",
-                column: "UserId1");
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(nullable: true),
+                    CommentTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    VideoId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Comments_Videos_VideoId",
+                        column: x => x.VideoId,
+                        principalTable: "Videos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -240,33 +241,24 @@ namespace SilkVideo.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId1",
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
                 table: "Comments",
-                column: "UserId1",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "UserId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Videos_AspNetUsers_UserId1",
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_VideoId",
+                table: "Comments",
+                column: "VideoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_UserId",
                 table: "Videos",
-                column: "UserId1",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId1",
-                table: "Comments");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Videos_AspNetUsers_UserId1",
-                table: "Videos");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -283,46 +275,16 @@ namespace SilkVideo.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Videos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Videos_UserId1",
-                table: "Videos");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Comments_UserId1",
-                table: "Comments");
-
-            migrationBuilder.DropColumn(
-                name: "Description",
-                table: "Videos");
-
-            migrationBuilder.DropColumn(
-                name: "UploadTime",
-                table: "Videos");
-
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Videos");
-
-            migrationBuilder.DropColumn(
-                name: "UserId1",
-                table: "Videos");
-
-            migrationBuilder.DropColumn(
-                name: "CommentTime",
-                table: "Comments");
-
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Comments");
-
-            migrationBuilder.DropColumn(
-                name: "UserId1",
-                table: "Comments");
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using SilkVideo.Models;
 
 namespace SilkVideo
 {
@@ -25,7 +26,7 @@ namespace SilkVideo
             services.AddDbContext<SilkVideoContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("SilkVideo")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<SilkVideoContext>();
             services.AddControllersWithViews();
 
@@ -53,7 +54,6 @@ namespace SilkVideo
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthentication();
