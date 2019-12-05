@@ -14,7 +14,14 @@ export class Upload extends Component {
 
     onChange(e) {
         let files = e.target.files;
-        console.warn("datafile", files)
+
+        let reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+
+        reader.onload = (e) => {
+            console.warn("imgdt", e.target.result);
+        }
+        //console.warn("datafile", files)
     }
 
     render() {
