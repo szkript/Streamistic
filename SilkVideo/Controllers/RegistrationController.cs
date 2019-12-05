@@ -15,7 +15,6 @@ namespace SilkVideo.Controllers
     {
 
         private readonly UserManager<User> usermanager;
-        private readonly SignInManager<User> signinmanager;
 
         public RegistrationController(UserManager<User> manager)
         {
