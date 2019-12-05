@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SilkVideo.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SilkVideo.Controllers
@@ -40,18 +42,54 @@ namespace SilkVideo.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> UploadVideoData(Video video)
+        public async Task<bool> UploadVideoData([FromForm]Microsoft.AspNetCore.Http.IFormFile body)
         {
+            byte[] fileBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                await body.CopyToAsync(memoryStream);
+                fileBytes = memoryStream.ToArray();
+                if (!Directory.Exists("./Videos"))
+                {
+                    Directory.CreateDirectory("Videos");
+                }
+            }
+
+            var filename = "./Videos/"+ body.FileName;
+            var contentType = body.ContentType;
+            bool fileWrite = ByteArrayToFile(filename, fileBytes);
             var user = await _userManager.FindByNameAsync("ezaz");
             if (user.Videos == null)
             {
                 user.Videos = new List<Video>();
             }
 
+            Video video = new Video();
+            video.Path = filename;
+            video.UploadTime = DateTime.Now;
+            video.Description = "in Progress";
             user.Videos.Add(video);
+
             await _userManager.UpdateAsync(user);
             return true;
 
         }
+        public bool ByteArrayToFile(string fileName, byte[] byteArray)
+        {
+            try
+            {
+                using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    fs.Write(byteArray, 0, byteArray.Length);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception caught in process: {0}", ex);
+                return false;
+            }
+        }
     }
+
 }
