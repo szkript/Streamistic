@@ -19,9 +19,12 @@ export class Upload extends Component {
         reader.readAsDataURL(files[0]);
 
         reader.onload = (e) => {
-            console.warn("imgdt", e.target.result);
+            const url = "https://localhost:44321/api/Video";
+            const formData = { file: e.target.result };
+            return post(url, formData)
+                .then(response=>console.warn("result", response))
+
         }
-        //console.warn("datafile", files)
     }
 
     render() {
