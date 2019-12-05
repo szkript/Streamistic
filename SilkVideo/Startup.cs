@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using SilkVideo.Models;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace SilkVideo
 {
@@ -53,6 +55,12 @@ namespace SilkVideo
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "Videos")),
+                RequestPath = "/Videos"
+            });
             app.UseSpaStaticFiles();
             app.UseRouting();
 

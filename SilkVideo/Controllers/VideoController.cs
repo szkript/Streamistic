@@ -58,7 +58,7 @@ namespace SilkVideo.Controllers
             var filename = "./Videos/"+ body.FileName;
             var contentType = body.ContentType;
             bool fileWrite = ByteArrayToFile(filename, fileBytes);
-            var user = await _userManager.FindByNameAsync("szkript");
+            var user = await _userManager.FindByNameAsync("ezaz");
             if (user.Videos == null)
             {
                 user.Videos = new List<Video>();
