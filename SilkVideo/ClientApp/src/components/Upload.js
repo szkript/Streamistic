@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
 
 export class Upload extends Component {
-  static displayName = Upload.name;
+    static displayName = Upload.name;
 
-  constructor(props) {
-    super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            test: "video file uploader",
+            image: ""
+        };
+    }
 
-  incrementCounter() {
-    this.setState({
-      currentCount: this.state.currentCount + 1
-    });
-  }
+    onChange(e) {
+        let files = e.target.files;
+        console.warn("datafile", files)
+    }
 
-  render() {
-    return (
-      <div>
-        <h1>Counter</h1>
+    render() {
+        return (
 
-        <p>This is a simple example of a React component.</p>
-
-        <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
-
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button>
-      </div>
-    );
-  }
+            <div onSubmit={this.onFormSubmit} >
+                <h1>{this.state.test}</h1>
+                <input type="file" name="file" onChange={(e) => this.onchange(e)}></input>
+            </div>
+        );
+    }
 }
