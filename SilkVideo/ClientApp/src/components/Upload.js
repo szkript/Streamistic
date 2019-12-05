@@ -8,7 +8,7 @@ export class Upload extends Component {
         super(props);
         this.state = {
             test: "video file uploader",
-            image: ""
+            video: ""
         };
     }
 
@@ -21,7 +21,11 @@ export class Upload extends Component {
         reader.onload = (e) => {
             const url = "https://localhost:44321/api/Video";
             const formData = { file: e.target.result };
-            return post(url, formData)
+            const datas = {
+                description: "teszt2",
+                path: "tesztPath2"
+            }
+            return post(url, datas)
                 .then(response=>console.warn("result", response))
 
         }
