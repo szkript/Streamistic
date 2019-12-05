@@ -8,16 +8,26 @@ export class Upload extends Component {
         super(props);
         this.state = {
             test: "video file uploader",
-            video: ""
+            video: "",
+            value: ""
         };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({ value: event.target.value });
+    }
+
+    handleSubmit(event) {
+        this.setState({value: event.target.value})
     }
 
     onChange(e) {
         let files = e.target.files;
 
         let reader = new FileReader();
-        reader.readAsArrayBuffer(files[0]);
-        //reader.readAsDataURL(files[0]);
+        reader.readAsDataURL(files[0]);
 
         reader.onload = (e) => {
             const url = "https://localhost:44321/api/Video";
@@ -34,7 +44,6 @@ export class Upload extends Component {
 
     render() {
         return (
-
             <div onSubmit={this.onFormSubmit} >
                 <h1>{this.state.test}</h1>
                 <input type="file" name="file" onChange={(e) => this.onChange(e)}></input>
