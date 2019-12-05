@@ -21,21 +21,6 @@ export class Register extends Component {
         const url = "https://localhost:44321/api/Registration";
         const uname = this.state.username;
         const pw = this.state.password;
-        //const formData = new FormData();
-        //formData.set('UserName', { uname });
-        //formData.set('Password', { pw });
-        //const config = {
-        //    headers: {
-        //        'contentType': 'application/json',
-        //        'charSet':'utf-8'
-        //    },
-        //};
-        console.log('this is:', this);
-        //var querystring = require('querystring');
-        //return axios.post(url, querystring.stringify({
-        //    UserName: { uname },
-        //    Password: { pw }
-        //}));
         const datas = {
             UserName: `${uname}`,
             Password: `${pw}`

@@ -23,11 +23,11 @@ export class Login extends Component {
         const url = "https://localhost:44321/api/Login";
         const uname = this.state.username;
         const pw = this.state.password;
-        const loginData = {
-            UserName: { uname },
-            Password: { pw }
-        };
-        return post(url, loginData)
+        const datas = {
+            UserName: `${uname}`,
+            Password: `${pw}`
+        }
+        return post(url, datas)
             .then(response => console.warn("result", response))
     }
 
