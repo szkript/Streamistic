@@ -22,12 +22,12 @@ export class Login extends Component {
     handleSubmit(event) {
         event.PreventDefault();
         const url = "https://localhost:44321/api/Login";
-        const uname = event.target.username;
-        const userData = {
-            UserName: { uname},
-            //Password: { }
-        }
-        console.warn(uname);
+        //const uname = event.target.username;
+        //const userData = {
+        //    UserName: { uname},
+        //    //Password: { }
+        //}
+        console.warn(url);
         //return post(url, datas)
         //    .then(response => console.warn("result", response))
     }
