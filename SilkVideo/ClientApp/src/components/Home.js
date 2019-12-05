@@ -35,7 +35,7 @@ export class Home extends Component {
                 <>
                     {items.map(item => (
                         <video width="320" height="240" controls>
-                            <source src="./Videos/video0.mp4" type="video/mp4"></source>
+                            <source src="Videos/video0.mp4" type="video/mp4"></source>
                         </video>
                         
                     ))}
