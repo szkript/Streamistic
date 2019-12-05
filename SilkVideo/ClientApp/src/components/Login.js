@@ -18,23 +18,13 @@ export class Login extends Component {
         console.warn("userField: ", this.state.username, "pwField: ", this.state.password);
     }
 
-    handleSubmit(event, uname, pw) {
-        //const uname = event.target.username;
-        //const userData = {
-        //    UserName: { uname},
-        //    //Password: { }
-        //}
-        console.warn("lefut?");
-        //return post(url, datas)
-        //    .then(response => console.warn("result", response))
-    }
     handleClick = () => {
         console.log('this is:', this);
         const url = "https://localhost:44321/api/Login";
         const uname = this.state.username;
         const pw = this.state.password;
         const loginData = {
-            Username: { uname },
+            UserName: { uname },
             Password: { pw }
         };
         return post(url, loginData)
