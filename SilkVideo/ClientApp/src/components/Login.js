@@ -15,7 +15,7 @@ export class Login extends Component {
         // check it out: we get the evt.target.name (which will be either "email" or "password")
         // and use it to target the key on our `state` object with the same name, using bracket syntax
         this.setState({ [evt.target.name]: evt.target.value });
-        console.warn("userField: ", this.state.username, "pwField: ", this.state.password);
+        //console.warn("userField: ", this.state.username, "pwField: ", this.state.password);
     }
 
     handleClick = () => {
