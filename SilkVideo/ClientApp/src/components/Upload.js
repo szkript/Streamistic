@@ -16,7 +16,8 @@ export class Upload extends Component {
         let files = e.target.files;
 
         let reader = new FileReader();
-        reader.readAsDataURL(files[0]);
+        reader.readAsArrayBuffer(files[0]);
+        //reader.readAsDataURL(files[0]);
 
         reader.onload = (e) => {
             const url = "https://localhost:44321/api/Video";
