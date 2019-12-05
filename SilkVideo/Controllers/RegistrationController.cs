@@ -15,7 +15,6 @@ namespace SilkVideo.Controllers
     {
 
         private readonly UserManager<User> usermanager;
-        private readonly SignInManager<User> signinmanager;
 
         public RegistrationController(UserManager<User> manager)
         {
@@ -46,19 +45,5 @@ namespace SilkVideo.Controllers
             var result = await usermanager.CreateAsync(user, user.Password);
             return result.Succeeded;
         }
-
-        [HttpPut]
-        public async Task<bool> UploadVideo()
-        {
-            var video = new Video();
-            video.Description = "azaz";
-            var user = await usermanager.FindByNameAsync("ezaz");
-            user.Videos = new List<Video>();
-            user.Videos.Add(video);
-            await usermanager.UpdateAsync(user);
-            return true;
-
-        }
-
     }
 }
