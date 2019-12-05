@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactPlayer from 'react-player'
 
 export class Home extends Component {
     constructor(props) {
@@ -15,12 +16,12 @@ export class Home extends Component {
             .then(res => res.json())
             .then((result) => {
                 console.log(result)
-                    this.setState({
-                        isLoaded: true,
-                        items: result
-                    });
-                }
-        ).catch(console.log)
+                this.setState({
+                    isLoaded: true,
+                    items: result
+                });
+            }
+            ).catch(console.log)
     }
 
     render() {
@@ -31,13 +32,14 @@ export class Home extends Component {
             return <div>Loading...</div>;
         } else {
             return (
-                <ul>
+                <>
                     {items.map(item => (
-                        <li key={item.id}>
-                            {item.path}
-                        </li>
+                        <video width="320" height="240" controls>
+                            <source src="./Videos/video0.mp4" type="video/mp4"></source>
+                        </video>
+                        
                     ))}
-                </ul>
+                </>
             );
         }
     }
