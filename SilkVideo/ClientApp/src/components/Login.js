@@ -20,7 +20,7 @@ export class Login extends Component {
 
     handleClick = () => {
         console.log('this is:', this);
-        const url = "https://localhost:44321/api/Login";
+        const url = "http://localhost:54352/api/Login";
         const uname = this.state.username;
         const pw = this.state.password;
         const datas = {

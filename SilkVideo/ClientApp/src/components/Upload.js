@@ -13,7 +13,7 @@ export class Upload extends React.Component {
     async submit(e) {
         e.preventDefault();
 
-        const url = `https://localhost:44321/api/Video`;
+        const url = `http://localhost:54352/api/Video`;
         const formData = new FormData();
         formData.append('body', this.state.file);
         const config = {

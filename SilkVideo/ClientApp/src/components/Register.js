@@ -18,7 +18,7 @@ export class Register extends Component {
     }
 
     handleClick = () => {
-        const url = "https://localhost:44321/api/Registration";
+        const url = "http://localhost:54352/api/Registration";
         const uname = this.state.username;
         const pw = this.state.password;
         const datas = {
