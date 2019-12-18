@@ -11,7 +11,7 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-        fetch("https://localhost:44321/api/Video")
+        fetch("http://localhost:54352/api/Video")
             .then(res => res.json())
             .then((result) => {
                 console.log(result)
