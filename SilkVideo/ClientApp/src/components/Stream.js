@@ -11,19 +11,31 @@ export class Stream extends Component {
             baseUrl: "/liveStream",
             streamName: null,
             isLoaded: false,
-            constructedUrl: null
+            constructedUrl: null,
+            streamKey: null
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    getStreamKey(){
+        let url = this.props.location.pathname;
+        let asd = url.split("/");
+        console.log(asd);
+        //username from url as streamKey
+        return asd[2];
     }
 
     componentDidMount() {
         const videoTag = document.getElementById("video");
         videoTag.style.display = "none";
+        this.getStreamKey();
+        const streamKey = this.getStreamKey();
         if (this.props.location.pathname !== this.state.baseUrl) {
+            //hide and show the elements
             const formTag = document.getElementById("submitForm");
             formTag.style.display = "none";
             videoTag.style.display = "block";
-
+            //stream video player
             const script = document.createElement("script");
             script.async = true;
             script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
@@ -31,13 +43,13 @@ export class Stream extends Component {
             let video = document.getElementById('video');
             let hls = new Hls();
             if (Hls.isSupported()) {
-                hls.loadSource('http://64.225.24.130:8080/hls/sajt3.m3u8');
+                hls.loadSource(`http://64.225.24.130:8080/hls/${streamKey}.m3u8`);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, function () {
                     video.play();
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = 'http://64.225.24.130:8080/hls/sajt3.m3u8';
+                video.src = `http://64.225.24.130:8080/hls/${streamKey}.m3u8`;
                 video.addEventListener('canplay', function () {
                     video.play();
                 });
@@ -72,6 +84,7 @@ export class Stream extends Component {
             streamUrlParagraph.appendChild(streamUrlInfo);
             componentDiv.appendChild(streamUrlParagraph);
             infoText = document.createTextNode("your stream key is : " + response.data);
+            this.setState({streamKey: response.data});
             componentDiv.appendChild(anchor);
             result = true;
         } else {
@@ -96,7 +109,7 @@ export class Stream extends Component {
     render() {
         return (
             <div id='switch'>
-                <video id="video" controls></video>
+                <video id="video" controls style={{maxWidth: 600, maxHeight: 500}}></video>
                 <form id="submitForm">
                     <input type="button" value="Start stream" onClick={this.handleClick}/>
                 </form>
