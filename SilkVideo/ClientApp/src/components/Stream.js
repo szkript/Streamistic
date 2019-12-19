@@ -102,6 +102,7 @@ export class Stream extends Component {
         const datas = {
             Description: `${streamName}`
         };
+        post(url + "/record");
         return post(url, datas)
             .then(response => this.constructUrl(response));
     };
