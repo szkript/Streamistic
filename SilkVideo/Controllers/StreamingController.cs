@@ -26,14 +26,15 @@ namespace SilkVideo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> StartLiveStream(Video stream)
+        public async Task<string> StartLiveStream()
         {
-            var user = await _userManager.FindByNameAsync("ezaz");
-            Video liveStream = stream;
-            user.Videos.Add(liveStream);
-            _context.Update(user);
-            var updatedStream = await _context.Videos.FindAsync(stream);
-            return Redirect("localhost:/stream/"+ updatedStream.Id);
+            return this.User.Identity.Name;
+            //var user = await _userManager.FindByNameAsync("ezaz");
+            //Video liveStream = stream;
+            //user.Videos.Add(liveStream);
+            //_context.Update(user);
+            //var updatedStream = await _context.Videos.FindAsync(stream);
+            //return Redirect("localhost:/stream/"+ updatedStream.Id);
         }
 
 
