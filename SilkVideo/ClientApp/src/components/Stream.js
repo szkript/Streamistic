@@ -2,8 +2,15 @@ import React, {Component} from 'react';
 import ReactDOM from "react-dom";
 import Hls from "hls.js";
 
-export class LiveStream extends Component {
-
+export class Stream extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: null,
+            isLoaded: false,
+            items: []
+        };
+    }
 
     componentDidMount() {
         const script = document.createElement("script");
@@ -34,7 +41,9 @@ export class LiveStream extends Component {
 
     render() {
         return (
-            <video id="video" controls></video>
+
+            //<video id="video" controls></video>
+            <p>vmi</p>
 
         );
     }
