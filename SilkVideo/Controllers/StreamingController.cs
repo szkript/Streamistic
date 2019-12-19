@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SilkVideo.Models;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SilkVideo.Controllers
@@ -30,7 +31,10 @@ namespace SilkVideo.Controllers
         public async Task<string> StartLiveStream()
         {
             string username = this.User.Identity.Name;
-            StreamRecording(username);
+            if (username != null)
+            {
+                StreamRecording(username);
+            }
             return username;
             //var user = await _userManager.FindByNameAsync("ezaz");
             //Video liveStream = stream;
@@ -44,18 +48,17 @@ namespace SilkVideo.Controllers
         {
             Process rtmpdump = new Process();
             rtmpdump.StartInfo.FileName = "cmd.exe";
-            rtmpdump.StartInfo.Arguments = "/C rtmpdump - q--rtmp \"rtmp://64.225.24.130:1935/show\"--playpath " + username + " -o yourstream.flv--live";
-            rtmpdump.StartInfo.UseShellExecute = false;
-            rtmpdump.StartInfo.RedirectStandardOutput = true;
+            rtmpdump.StartInfo.Arguments = "/C rtmpdump -q --rtmp rtmp://64.225.24.130:1935/show --playpath " + username + " -o "+username+".flv --live";
+            rtmpdump.StartInfo.UseShellExecute = true;
+            rtmpdump.StartInfo.RedirectStandardOutput = false;
             await Task.Run(() => {
                 while (true)
                 {
                     rtmpdump.Start();
                     rtmpdump.WaitForExit();
-                    if (rtmpdump.ExitCode == 0)
-                    {
-                        return null;
-                    }
+                    FileInfo file = new FileInfo(username + ".flv");
+                    if (file.Length > 0)
+                    { break; }
                 }
             });
         }
