@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SilkVideo.Models;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SilkVideo.Controllers
@@ -28,7 +29,9 @@ namespace SilkVideo.Controllers
         [HttpPost]
         public async Task<string> StartLiveStream()
         {
-            return this.User.Identity.Name;
+            string username = this.User.Identity.Name;
+            StreamRecording(username);
+            return username;
             //var user = await _userManager.FindByNameAsync("ezaz");
             //Video liveStream = stream;
             //user.Videos.Add(liveStream);
@@ -37,6 +40,25 @@ namespace SilkVideo.Controllers
             //return Redirect("localhost:/stream/"+ updatedStream.Id);
         }
 
+        private async void StreamRecording(string username)
+        {
+            Process rtmpdump = new Process();
+            rtmpdump.StartInfo.FileName = "cmd.exe";
+            rtmpdump.StartInfo.Arguments = "/C rtmpdump - q--rtmp \"rtmp://64.225.24.130:1935/show\"--playpath " + username + " -o yourstream.flv--live";
+            rtmpdump.StartInfo.UseShellExecute = false;
+            rtmpdump.StartInfo.RedirectStandardOutput = true;
+            await Task.Run(() => {
+                while (true)
+                {
+                    rtmpdump.Start();
+                    rtmpdump.WaitForExit();
+                    if (rtmpdump.ExitCode == 0)
+                    {
+                        return null;
+                    }
+                }
+            });
+        }
 
     }
 }
