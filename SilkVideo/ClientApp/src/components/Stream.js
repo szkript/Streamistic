@@ -7,7 +7,7 @@ export class Stream extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            baseUrl: "/liveStream/",
+            baseUrl: this.props.location.pathname,
             streamName: null,
             isLoaded: false,
             constructedUrl: null
@@ -44,18 +44,28 @@ export class Stream extends Component {
     }
 
     constructUrl = (response) =>{
+        let result;
+        const info = document.createElement("p");
+        let infoText = document.createTextNode("You have to login for stream key");
         const anchor = document.createElement("a");
         const linkText = document.createTextNode("Your streaming will be available here");
         anchor.appendChild(linkText);
-        console.log(response);
-        let finalUrl = this.state.baseUrl + response.data;
+        const componentDiv = document.getElementById('switch');
+        let finalUrl = this.state.baseUrl + "/" + response.data;
         this.setState({
             constructedUrl: finalUrl
         });
         anchor.href = finalUrl;
-        document.getElementById('switch').appendChild(anchor);
-        console.warn(finalUrl);
-
+        if (response.status === 200){
+            infoText = document.createTextNode("your stream key is :" + response.data);
+            componentDiv.appendChild(anchor);
+            result = true;
+        }else{
+            result = false;
+        }
+        info.appendChild(infoText);
+        componentDiv.appendChild(info);
+        return result;
     };
 
     handleClick = () => {
@@ -67,7 +77,6 @@ export class Stream extends Component {
         };
         return post(url, datas)
             .then(response =>  this.constructUrl(response));
-                // console.warn("result", response))
     };
 
     render() {
