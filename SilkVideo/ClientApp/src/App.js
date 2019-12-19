@@ -21,7 +21,7 @@ export default class App extends Component {
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={Register} />
                 <Route path='/logout' component={Logout} />
-                <Route path='/live-stream' component={Stream}/>
+                <Route path='/liveStream' component={Stream}/>
             </Layout>
         );
     }
