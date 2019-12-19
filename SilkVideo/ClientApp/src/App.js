@@ -6,7 +6,7 @@ import { Upload } from './components/Upload';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { Logout } from './components/Logout';
-import {LiveStream} from "./components/LiveStream";
+import {Stream} from "./components/Stream";
 
 import './custom.css'
 
@@ -21,7 +21,7 @@ export default class App extends Component {
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={Register} />
                 <Route path='/logout' component={Logout} />
-                <Route path='/live-stream' component={LiveStream}/>
+                <Route path='/live-stream' component={Stream}/>
             </Layout>
         );
     }
