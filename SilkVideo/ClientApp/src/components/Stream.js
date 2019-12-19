@@ -109,7 +109,7 @@ export class Stream extends Component {
     render() {
         return (
             <div id='switch'>
-                <video id="video" controls></video>
+                <video id="video" controls style={{maxWidth: 600, maxHeight: 500}}></video>
                 <form id="submitForm">
                     <input type="button" value="Start stream" onClick={this.handleClick}/>
                 </form>
