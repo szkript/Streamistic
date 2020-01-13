@@ -1,5 +1,8 @@
 ﻿import React, { Component } from 'react';
 import axios, { post } from 'axios';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 export class Login extends Component {
     constructor() {
@@ -15,7 +18,12 @@ export class Login extends Component {
         // check it out: we get the evt.target.name (which will be either "email" or "password")
         // and use it to target the key on our `state` object with the same name, using bracket syntax
         this.setState({ [evt.target.name]: evt.target.value });
-        //console.warn("userField: ", this.state.username, "pwField: ", this.state.password);
+    }
+
+    handleResponse(response){
+        if (response.status === 200){
+            cookies.set('userToken', response.data)
+        }
     }
 
     handleClick = () => {
@@ -26,15 +34,15 @@ export class Login extends Component {
         const datas = {
             UserName: `${uname}`,
             Password: `${pw}`
-        }
+        };
         return post(url, datas)
-            .then(response => console.warn("result", response))
-    }
+            .then(response => this.handleResponse(response))
+    };
 
     render() {
+        console.log(cookies.get('userToken'));
         return (
             <form>
-
                 <label>Username</label>
                 <input type="text" name="username" onChange={this.handleChange} />
 

@@ -3,6 +3,7 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
+
 export class NavMenu extends Component {
     static displayName = NavMenu.name;
 
@@ -12,7 +13,7 @@ export class NavMenu extends Component {
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
             collapsed: true
-        };
+    };
     }
 
     toggleNavbar() {

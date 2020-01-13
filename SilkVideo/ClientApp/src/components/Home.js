@@ -14,7 +14,7 @@ export class Home extends Component {
         fetch("http://localhost:54352/api/Video")
             .then(res => res.json())
             .then((result) => {
-                console.log(result)
+                console.log(result);
                 this.setState({
                     isLoaded: true,
                     items: result
