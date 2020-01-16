@@ -18,6 +18,8 @@ namespace SilkVideo.Controllers
         private readonly SilkVideoContext _context;
         private readonly UserManager<User> _userManager;
 
+        const string filePath = "C:\\Videos";
+
         public StreamingController(SilkVideoContext context, UserManager<User> usermanager)
         {
             _context = context;
@@ -44,7 +46,7 @@ namespace SilkVideo.Controllers
             if (username != null)
             {
                 video.Description = "In Progress";
-                video.Path = "Videos/" + username + formattedUploadDate + ".mp4";
+                video.Path = filePath + "/" + username + formattedUploadDate + ".mp4";
                 video.UploadTime = uploadDate;
                 bool videoIsRecorded = await recordService.StreamRecordingAsync(username, formattedUploadDate);
                 if (videoIsRecorded)

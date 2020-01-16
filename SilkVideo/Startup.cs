@@ -15,6 +15,8 @@ namespace SilkVideo
 {
     public class Startup
     {
+        const string filePath = "C:\\Videos";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -57,8 +59,7 @@ namespace SilkVideo
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "Videos")),
+                FileProvider = new PhysicalFileProvider(filePath),
                 RequestPath = "/Videos"
             });
             app.UseSpaStaticFiles();
