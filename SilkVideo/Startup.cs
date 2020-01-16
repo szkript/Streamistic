@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,14 +7,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using SilkVideo.Models;
-using System.IO;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace SilkVideo
 {
     public class Startup
     {
-        const string filePath = "C:\\Videos";
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Videos");
 
         public Startup(IConfiguration configuration)
         {
@@ -59,6 +59,10 @@ namespace SilkVideo
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
+                OnPrepareResponse = ctx => {
+                    ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+                    ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                },
                 FileProvider = new PhysicalFileProvider(filePath),
                 RequestPath = "/Videos"
             });

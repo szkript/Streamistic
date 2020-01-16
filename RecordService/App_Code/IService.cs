@@ -20,7 +20,7 @@ public interface IService
 
 	// TODO: Add your service operations here
 	[OperationContract]
-	Task<bool> StreamRecording(string username, string formattedUploadDate);
+	Task<bool> StreamRecordingAsync(string username, string formattedUploadDate, string filePath);
 
 }
 

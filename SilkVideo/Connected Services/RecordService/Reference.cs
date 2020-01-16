@@ -61,7 +61,7 @@ namespace RecordService
         System.Threading.Tasks.Task<RecordService.CompositeType> GetDataUsingDataContractAsync(RecordService.CompositeType composite);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/StreamRecording", ReplyAction="http://tempuri.org/IService/StreamRecordingResponse")]
-        System.Threading.Tasks.Task<bool> StreamRecordingAsync(string username, string formattedUploadDate);
+        System.Threading.Tasks.Task<bool> StreamRecordingAsync(string username, string formattedUploadDate, string filePath);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
@@ -124,9 +124,9 @@ namespace RecordService
             return base.Channel.GetDataUsingDataContractAsync(composite);
         }
         
-        public System.Threading.Tasks.Task<bool> StreamRecordingAsync(string username, string formattedUploadDate)
+        public System.Threading.Tasks.Task<bool> StreamRecordingAsync(string username, string formattedUploadDate, string filePath)
         {
-            return base.Channel.StreamRecordingAsync(username, formattedUploadDate);
+            return base.Channel.StreamRecordingAsync(username, formattedUploadDate, filePath);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()

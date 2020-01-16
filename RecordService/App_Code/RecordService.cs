@@ -12,72 +12,59 @@ using System.Threading.Tasks;
 // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service" in code, svc and config file together.
 public class RecordService : IService
 {
-    const string filePath = "C:\\Videos";
+    
 
     public string GetData(int value)
     {
         return string.Format("You entered: {0}", value);
     }
 
-    public async Task<bool> StreamRecording(string username, string formattedUploadDate)
+    public async Task<bool> StreamRecordingAsync(string username, string formattedUploadDate, string filePath)
     {
         Process rtmpdump = new Process();
         rtmpdump.StartInfo.FileName = "cmd.exe";
-        rtmpdump.StartInfo.Arguments = "/C rtmpdump -q --rtmp rtmp://64.225.24.130:1935/show --playpath " + username + " -o "+filePath+"/" + username + ".flv --live";
+        rtmpdump.StartInfo.Arguments = "/C rtmpdump -q --rtmp rtmp://64.225.24.130:1935/show --playpath " + username + " -o " + filePath + "/" + username + ".flv --live";
         rtmpdump.StartInfo.UseShellExecute = true;
 
         bool result = await Task.Run<bool>(() =>
             {
+                bool recordResult = false;
                 int counter = 0;
                 while (true)
                 {
                     rtmpdump.Start();
                     rtmpdump.WaitForExit();
-                    FileInfo file = new FileInfo(filePath+"/" + username + ".flv");
-                    try
+                    rtmpdump.Close();
+                    FileInfo file = new FileInfo(filePath + "/" + username + ".flv");
+                    if (file.Length > 0)
                     {
-                        if (file.Length > 0)
-                        {
-                            Process ffmpeg = new Process();
-                            ffmpeg.StartInfo.FileName = "cmd.exe";
-                            ffmpeg.StartInfo.Arguments = "/C ffmpeg -i "+ filePath + "/" + username + ".flv -c:v libx264 -crf 19 -strict experimental "+filePath+"/" + username + formattedUploadDate + ".mp4";
-                            ffmpeg.StartInfo.UseShellExecute = true;
-                            ffmpeg.StartInfo.RedirectStandardOutput = false;
-                            ffmpeg.Start();
-                            ffmpeg.WaitForExit();
-                            file.Delete();
-                            return true;
-                        }
-                        if (counter > 10)
-                        {
-                            file.Delete();
-                            return false;
-                        }
-                        counter++;
+                        Process ffmpeg = new Process();
+                        ffmpeg.StartInfo.FileName = "cmd.exe";
+                        ffmpeg.StartInfo.Arguments = "/C ffmpeg -i " + filePath + "/" + username + ".flv -c:v libx264 -crf 19 -strict experimental " + filePath + "/" + username + formattedUploadDate + ".mp4";
+                        ffmpeg.StartInfo.UseShellExecute = true;
+                        ffmpeg.StartInfo.RedirectStandardOutput = false;
+                        ffmpeg.Start();
+                        ffmpeg.WaitForExit();
+                        file.Delete();
+                        ffmpeg.Close();
+                        ffmpeg.Dispose();
+                        rtmpdump.Dispose();
+                        recordResult = true;
+                        break;
                     }
-                    catch (FileNotFoundException ex)
+                    if (counter > 10)
                     {
-                        Console.WriteLine(ex.ToString());
-                        string apPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
-                        Console.WriteLine(apPath);
-                        try
-                        { 
-                            File.Create(ex.FileName);
-                        }
-                        catch(DirectoryNotFoundException e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
-
+                        rtmpdump.Dispose();
+                        file.Delete();
+                        recordResult = false;
+                        break;
                     }
-                    catch (DirectoryNotFoundException ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
+                    counter++;
                 }
+                return recordResult;
             });
         return result;
-        }
+    }
     public CompositeType GetDataUsingDataContract(CompositeType composite)
     {
         if (composite == null)
