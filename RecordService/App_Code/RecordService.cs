@@ -17,15 +17,14 @@ public class RecordService : IService
         return string.Format("You entered: {0}", value);
     }
 
-    public async void StreamRecording(string username)
+    public async Task<bool> StreamRecording(string username, string formattedUploadDate)
     {
-        //Video video = new Video();
-        //video.Path = null;
         Process rtmpdump = new Process();
         rtmpdump.StartInfo.FileName = "cmd.exe";
         rtmpdump.StartInfo.Arguments = "/C rtmpdump -q --rtmp rtmp://64.225.24.130:1935/show --playpath " + username + " -o Videos/" + username + ".flv --live";
         rtmpdump.StartInfo.UseShellExecute = true;
-            await Task.Run(() =>
+
+        bool result = await Task.Run<bool>(() =>
             {
                 int counter = 0;
                 while (true)
@@ -37,12 +36,6 @@ public class RecordService : IService
                     {
                         if (file.Length > 0)
                         {
-                            DateTime uploadDate = DateTime.Now;
-                            string formattedUploadDate = "" + uploadDate.Year + uploadDate.Month + uploadDate.Day + uploadDate.Hour + uploadDate.Minute + uploadDate.Second;
-
-                            //video.Description = "In Progress";
-                            //video.Path = "Videos/" + username + formattedUploadDate + ".mp4";
-                            //video.UploadTime = uploadDate;
                             Process ffmpeg = new Process();
                             ffmpeg.StartInfo.FileName = "cmd.exe";
                             ffmpeg.StartInfo.Arguments = "/C ffmpeg -i Videos/" + username + ".flv -c:v libx264 -crf 19 -strict experimental Videos/" + username + formattedUploadDate + ".mp4";
@@ -51,12 +44,12 @@ public class RecordService : IService
                             ffmpeg.Start();
                             ffmpeg.WaitForExit();
                             file.Delete();
-                            break;
+                            return true;
                         }
                         if (counter > 10)
                         {
                             file.Delete();
-                            break;
+                            return false;
                         }
                         counter++;
                     }
@@ -81,6 +74,7 @@ public class RecordService : IService
                     }
                 }
             });
+        return result;
         }
     public CompositeType GetDataUsingDataContract(CompositeType composite)
     {

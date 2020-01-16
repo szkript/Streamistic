@@ -20,7 +20,7 @@ public interface IService
 
 	// TODO: Add your service operations here
 	[OperationContract]
-	void StreamRecording(string username);
+	Task<bool> StreamRecording(string username, string formattedUploadDate);
 
 }
 
