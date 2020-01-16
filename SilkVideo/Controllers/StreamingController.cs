@@ -14,8 +14,11 @@ namespace SilkVideo.Controllers
     [ApiController]
     public class StreamingController : ControllerBase
     {
+        RecordService.ServiceClient recordService = new RecordService.ServiceClient();
         private readonly SilkVideoContext _context;
         private readonly UserManager<User> _userManager;
+
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Videos");
 
         public StreamingController(SilkVideoContext context, UserManager<User> usermanager)
         {
@@ -30,15 +33,30 @@ namespace SilkVideo.Controllers
             return video;
         }
 
-        
+
         [HttpPost]
         [Route("record")]
         public async Task<IActionResult> StartLiveStreamRecord()
         {
+            Video video = new Video();
+            video.Path = null;
             string username = this.User.Identity.Name;
+            DateTime uploadDate = DateTime.Now;
+            string formattedUploadDate = "" + uploadDate.Year + uploadDate.Month + uploadDate.Day + uploadDate.Hour + uploadDate.Minute + uploadDate.Second;
             if (username != null)
             {
-                await StreamRecording(username);
+                video.Description = "In Progress";
+                video.Path ="Videos/" + username + formattedUploadDate + ".mp4";
+                video.UploadTime = uploadDate;
+                recordService.Endpoint.Binding.CloseTimeout = new TimeSpan(24, 0, 0);
+                recordService.Endpoint.Binding.SendTimeout = new TimeSpan(24, 0, 0);
+                recordService.Endpoint.Binding.ReceiveTimeout = new TimeSpan(24, 0, 0);
+                recordService.Endpoint.Binding.OpenTimeout = new TimeSpan(24, 0, 0);
+                bool videoIsRecorded = await recordService.StreamRecordingAsync(username, formattedUploadDate, filePath);
+                if (videoIsRecorded)
+                {
+                    await SaveVideoAsync(username, video);
+                }
             }
 
             return Ok();
@@ -61,58 +79,6 @@ namespace SilkVideo.Controllers
             //return Redirect("localhost:/stream/"+ updatedStream.Id);
         }
 
-        private async Task StreamRecording(string username)
-        {
-            Video video = new Video();
-            video.Path = null;
-            Process rtmpdump = new Process();
-            rtmpdump.StartInfo.FileName = "cmd.exe";
-            rtmpdump.StartInfo.Arguments = "/C rtmpdump -q --rtmp rtmp://64.225.24.130:1935/show --playpath " + username + " -o Videos/"+username+".flv --live";
-            rtmpdump.StartInfo.UseShellExecute = true;
-            rtmpdump.StartInfo.RedirectStandardOutput = false;
-            await Task.Run(() => {
-                int counter = 0;
-                while (true)
-                {
-                    rtmpdump.Start();
-                    rtmpdump.WaitForExit();
-                    FileInfo file = new FileInfo("Videos/"+ username + ".flv");
-                    if (file.Length > 0)
-                    {
-                        DateTime uploadDate = DateTime.Now;
-                        string formattedUploadDate ="" + uploadDate.Year + uploadDate.Month + uploadDate.Day + uploadDate.Hour + uploadDate.Minute + uploadDate.Second;
-                        
-                        video.Description = "In Progress";
-                        video.Path = "Videos/" + username + formattedUploadDate + ".mp4";
-                        video.UploadTime = uploadDate;
-                        Process ffmpeg = new Process();
-                        ffmpeg.StartInfo.FileName = "cmd.exe";
-                        ffmpeg.StartInfo.Arguments = "/C ffmpeg -i Videos/"+username+".flv -c:v libx264 -crf 19 -strict experimental Videos/"+username+ formattedUploadDate +".mp4";
-                        ffmpeg.StartInfo.UseShellExecute = true;
-                        ffmpeg.StartInfo.RedirectStandardOutput = false;
-                        ffmpeg.Start();
-                        ffmpeg.WaitForExit();
-                        file.Delete();
-                        
-                        break;
-                    }
-
-                    if (counter > 10)
-                    {
-                        file.Delete();
-                        break;
-                    }
-
-                    counter++;
-                }
-            });
-
-            if (video.Path != null)
-            {
-                await SaveVideoAsync(username, video);
-            }
-            
-        }
 
         private async Task SaveVideoAsync(string username, Video video)
         {
